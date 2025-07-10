@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Профиль</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .col-lg-3 {
+            width: 30%;
+        }
+        .col-lg-9 {
+            width: 70%;
+        }
+        .content-section {
+            padding-top: 50px;
+        }
+        .profile-card {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        .info-card {
+            min-height: 300px;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .avatar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <section style="background-color: #eee; min-height: 92vh;">
+        <div class="container-fluid content-section">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card mb-4 profile-card">
+                        <div class="card-body">
+                            <div class="avatar-container">
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                </svg>
+
+                                <h5 class="my-3">{{ user.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="card mb-4 info-card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Полное имя</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.name}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Почта</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.email}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Телефон</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{user.phone}}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-auto">
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-primary" onclick="window.location.href='/edit_account'">Редактировать</button>
+                                </div>
+                                <div class="col-sm-9">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

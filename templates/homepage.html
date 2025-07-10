@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+    <title>Главная страница</title>
+{% endblock %}
+
+
+{% block style %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-body {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .bi bi-chat-fill {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    .room-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .navbar-brand img {
+        height: 30px;
+    }
+    .search-box {
+        position: relative;
+    }
+    .search-box i {
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        color: #6c757d;
+    }
+    .search-input {
+        padding-left: 40px;
+        border-radius: 20px;
+    }
+    .category-badge {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+    .row {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="container mt-4">
+    <h3 class="text-center">Главная страница</h3>
+    <div class="row mt-4">
+        {% for chat in chats %}
+        <div class="col-md-6 col-lg-4 mt-4">
+            <div class="card chat-room-card h-100">
+                <div class="card-body text-center">
+                    <div class="chat-room-icon text-primary">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h5 class="card-title">{{ chat.title }}</h5>
+                    <p class="card-text">{{ chat.topic }}</p>
+                    <a href="/join_chat/{{ chat.id }}" class="btn btn-primary">Присоединиться</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+    
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

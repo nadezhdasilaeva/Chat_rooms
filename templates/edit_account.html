@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Редактировать профиль</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+        .col-lg-3 {
+            width: 30%;
+        }
+        .col-lg-9 {
+            width: 70%;
+        }
+        .content-section {
+            padding-top: 50px;
+        }
+        .profile-card {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        .info-card {
+            min-height: 300px;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .avatar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-pic {
+            display: inline-block;
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .navbar-nav .nav-link {
+            font-size: 1.25rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+    <section style="background-color: #eee; min-height: 92vh;">
+        <div class="container-fluid content-section">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="card mb-4 profile-card">
+                        <div class="card-body">
+                            <div class="avatar-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                </svg>
+                                <h5 class="my-3">{{ user.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="card mb-4 info-card">
+                        <div class="card-body">
+                            <h5 class="mb-4">Редактировать профиль</h5>
+                            {% if errors %}
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <form action="/edit_account" method="post">
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <label for="name" class="form-label">Полное имя:</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <label for="email" class="form-label">Почта:</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mb-3">
+                                    <div class="col-sm-3">
+                                        <label for="phone" class="form-label">Телефон:</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input type="text" id="phoneInput" name="phone" class="form-control" value="{{ user.phone }}" required>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row mt-4">
+                                    <div class="col-sm-3">
+                                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <a href="/account" class="btn btn-secondary">Отмена</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const phoneInput = document.getElementById('phoneInput');
+            if (phoneInput) {
+                // Маска для российского номера телефона (+7 (XXX) XXX-XX-XX)
+                Inputmask({
+                    "mask": "+7 (999) 999-99-99",
+                    "clearIncomplete": true // Очищать поле, если маска не заполнена полностью
+                }).mask(phoneInput);
+            }
+        });
+    </script>
+{% endblock %}

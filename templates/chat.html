@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Test</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    .chat-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+    
+    .user-info {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+    }
+    
+    .users-list {
+        margin-bottom: 20px;
+    }
+    
+    .user {
+        padding: 5px 10px;
+        background-color: #e9e9e9;
+        margin: 5px 0;
+        border-radius: 3px;
+    }
+    
+    .chat-area {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #fafafa;
+    }
+    
+    .messages-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 15px 0;
+        height: 500px;
+        overflow-y: auto;
+        border: 1px solid #eee;
+        background-color: white;
+        padding: 10px;
+        border-radius: 3px;
+    }
+    
+    .messages-list li {
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        background-color: #e3f2fd;
+        border-radius: 15px;
+        max-width: 70%;
+        word-wrap: break-word;
+        position: relative;
+    }
+
+    .messages-list li.self {
+        background-color: #dcf8c6;
+        margin-left: auto;
+    }
+
+    .message-info {
+        font-size: 0.75em;
+        color: #666;
+        margin-top: 5px;
+        text-align: right;
+    }
+
+    .messages-list li.self .message-info {
+        text-align: left;
+    }
+
+    .message-date {
+        font-size: 0.7em;
+        color: #999;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    .message-form {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .message-input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+    }
+    
+    .send-button {
+        padding: 10px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    
+    .send-button:hover {
+        background-color: #45a049;
+    }
+    .hidden {
+        display: none;
+    }
+  
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="chat-container">
+    <h1 class="text-center">{{ chat.title }}</h1>
+    <h4 class="text-center">Описание: {{ chat.topic }}</h4>
+    <div class="user-info">
+        <h2>Вы: {{ user.name }}</h2>
+        <div id="ws-id" 
+            class="hidden">
+
+        </div>
+    </div>
+    
+    <div class="chat-area">
+        <ul id="messages" class="messages-list">
+            {% for message in messages %}
+                {% if loop.first or message.timestamp.date() != messages[loop.index0-1].timestamp.date() %}
+                    <div class="message-date">
+                        {{ message.timestamp.strftime('%d.%m.%Y') }}
+                    </div>
+                {% endif %}
+                <li {% if message.sender_id == user.id %}class="self"{% endif %}>
+                    <strong>{{ message.sender.name }}:</strong> {{ message.message_text }}
+                    <div class="message-info">
+                        {{ message.timestamp.strftime('%H:%M') }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <form action="" onsubmit="sendMessage(event)" class="message-form">
+            <input type="text" id="messageText" autocomplete="off" class="message-input" placeholder="Введите сообщение..."/>
+            <button class="send-button">Отправить</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    var client_id = "{{ user.id }}";
+    var client_name = "{{ user.name }}";
+    var chat_id = "{{ chat.id }}";
+    var lastDate = null;
+    
+    document.querySelector("#ws-id").textContent = client_id;
+    var ws = new WebSocket(`ws://localhost:8001/ws/${chat_id}/${client_id}`);
+    
+    ws.onmessage = function(event) {
+        var messages = document.getElementById('messages');
+        var messageData = JSON.parse(event.data);
+        var date = new Date(messageData.timestamp);
+        var currentDate = formatDate(date);
+        
+        // Добавляем разделитель с датой, если она изменилась
+        if (lastDate !== currentDate) {
+            var dateDiv = document.createElement('div');
+            dateDiv.className = 'message-date';
+            dateDiv.textContent = currentDate;
+            messages.appendChild(dateDiv);
+            lastDate = currentDate;
+        }
+        
+        var message = document.createElement('li');
+        if (messageData.is_self) {
+            message.classList.add('self');
+        }
+
+        var messageText = document.createElement('span');
+        messageText.textContent = messageData.sender_name + ": " + messageData.text;
+
+        var timestampDiv = document.createElement('div');
+        timestampDiv.classList.add('message-info');
+        timestampDiv.textContent = formatTime(date);
+
+        message.appendChild(messageText);
+        message.appendChild(timestampDiv);
+        messages.appendChild(message);
+        messages.scrollTop = messages.scrollHeight;
+    };
+    
+    function sendMessage(event) {
+        var input = document.getElementById("messageText");
+        if (input.value.trim() !== '') {
+            ws.send(input.value);
+            input.value = '';
+        }
+        event.preventDefault();
+    }
+
+    function formatDate(date) {
+        var day = date.getDate().toString().padStart(2, '0');
+        var month = (date.getMonth() + 1).toString().padStart(2, '0');
+        var year = date.getFullYear();
+        return `${day}.${month}.${year}`;
+    }
+
+    function formatTime(date) {
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var messagesList = document.getElementById('messages');
+        messagesList.scrollTop = messagesList.scrollHeight;
+    });
+</script>
+{% endblock %}

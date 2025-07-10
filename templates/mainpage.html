@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Главная страница</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .btn-lg {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="center-container">
+        <h1 class="display-4" style="font-size: 3rem; font-weight: 900;">Добро пожаловать в Онлайн-чат!</h1>
+        <a href="/login" class="btn btn-primary btn-lg" onclick="fadeOut()">Войти в систему</a>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function fadeOut() {
+            const container = document.getElementById('auth-container');
+            container.classList.remove('show');
+            container.classList.add('fade');
+        
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 500);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('auth-container');
+            container.classList.add('show');
+        });
+    </script>
+{% endblock %}

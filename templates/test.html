@@ -1,0 +1,83 @@
+<!-- {% extends "base.html" %}
+
+{% block title %}
+    <title>Главная страница</title>
+{% endblock %}
+
+{% block content %}
+<h1>WebSocket Chat</h1>
+<h2>{{ user.name }}</h2>
+<h2>Your ID: <span id="ws-id">{{ user.id }}</span></h2>
+<form action="" onsubmit="sendMessage(event)">
+    <input type="text" id="messageText" autocomplete="off"/>
+    <button>Send</button>
+</form>
+<ul id='messages'>
+</ul>
+<script>
+    var client_id = "{{ user.id }}";
+    var client_name = "{{ user.name }}";
+    
+    document.querySelector("#ws-id").textContent = client_id;
+    var ws = new WebSocket(`ws://localhost:8001/ws/${client_id}`);
+    ws.onmessage = function(event) {
+        var messages = document.getElementById('messages')
+        var message = document.createElement('li')
+        var content = document.createTextNode(event.data)
+        message.appendChild(content)
+        messages.appendChild(message)
+    };
+    function sendMessage(event) {
+        var input = document.getElementById("messageText")
+        ws.send(input.value)
+        input.value = ''
+        event.preventDefault()
+    }
+</script>
+{% endblock %} -->
+
+
+
+<!-- {% extends "base.html" %}
+
+{% block title %}
+    <title>Главная страница</title>
+{% endblock %}
+
+{% block content %}
+<h1>WebSocket Chat</h1>
+<h2>{{ user.name }}</h2>
+<h2>Your ID: <span id="ws-id">{{ user.id }}</span></h2>
+<h2>Users:</h2>
+{% for other_user in users %}
+    {% if other_user.id != user.id %}
+        <h2>{{ other_user.name }}</h2>
+    {% endif %}
+{% endfor %}
+<form action="" onsubmit="sendMessage(event)">
+    <input type="text" id="messageText" autocomplete="off"/>
+    <button>Send</button>
+</form>
+<ul id='messages'>
+</ul>
+<script>
+    var client_id = "{{ user.id }}";
+    var client_name = "{{ user.name }}";
+    
+    document.querySelector("#ws-id").textContent = client_id;
+    var ws = new WebSocket(`ws://localhost:8001/ws/${client_id}`);
+    ws.onmessage = function(event) {
+        var messages = document.getElementById('messages')
+        var message = document.createElement('li')
+        var content = document.createTextNode(event.data)
+        message.appendChild(content)
+        messages.appendChild(message)
+    };
+    function sendMessage(event) {
+        var input = document.getElementById("messageText")
+        ws.send(input.value)
+        input.value = ''
+        event.preventDefault()
+    }
+</script>
+{% endblock %} -->
