@@ -1,6 +1,8 @@
 from pydantic import BaseModel, EmailStr
 from sqlmodel import Field
 from pydantic_extra_types.phone_numbers import PhoneNumber
+from typing import Optional
+from datetime import datetime
 
 
 class UserCreate(BaseModel):
@@ -21,6 +23,15 @@ class UserUpdate(BaseModel):
 class GetUser(BaseModel):
     email: EmailStr
     name: str
+
+
+class GetUserForAdmin(BaseModel):
+    id: Optional[int]
+    role: Optional[str]
+    email: Optional[str]
+    phone: Optional[str]
+    name: Optional[str]
+    date_reg: datetime
 
 
 class Email(BaseModel):
@@ -46,4 +57,3 @@ class ChatMessageCreate(BaseModel):
     chat_id: int
     sender_id: int
     message_text: str
-
