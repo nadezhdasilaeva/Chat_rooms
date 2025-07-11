@@ -29,16 +29,6 @@ class User(SQLModel, table=True):
         self.role = 'user'
 
 
-# class Message(SQLModel, table=True):
-#     id: Optional[int] = Field(primary_key=True, default=None)
-#     sender_user_id: int = Field(foreign_key='user.id')
-#     recipient_user_id: int = Field(foreign_key='user.id')
-#     enc_message: bytes
-#     date_create: datetime = Field(default=datetime.utcnow())
-#     date_last_update: datetime = Field(default=datetime.utcnow())
-#     changed: bool = Field(default=False)
-
-
 class Chat(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None)
     title: str
