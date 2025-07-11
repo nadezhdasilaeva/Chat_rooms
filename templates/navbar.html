@@ -11,6 +11,13 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/home">Все комнаты</a>
                 </li>
+                {% if request.cookies.role == "super_user" %}
+                    {% if request.cookies.get("access_token") %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/all_users">Все пользователи</a>
+                    </li>
+                    {% endif %}
+                {% endif %}
             </ul>
             <div class="d-flex">
                 <div class="dropdown ms-3">
