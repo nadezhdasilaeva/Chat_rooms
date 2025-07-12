@@ -52,6 +52,9 @@ def hash_password(password: str):
     return sha256(password.encode()).hexdigest()
 
 
+key = Fernet.generate_key()
+print(key.decode())
+
 fernet = Fernet(ENCRYPTION_KEY)
 
 def encrypt_message(message: str) -> bytes:
