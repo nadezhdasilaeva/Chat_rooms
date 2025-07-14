@@ -33,11 +33,15 @@ async def login(request: Request, db: Session = Depends(get_session)):
     if not user or not user.verify_password(password):
         errors.append("Неверны почта или пароль!")
         return templates.TemplateResponse("login.html", {"request": request, "errors": errors})
+    if user.role == "BAN":
+        errors.append("Пользователь заблокирован!")
+        return templates.TemplateResponse("login.html", {"request": request, "errors": errors})
     else:
         access_token = create_access_token(data={"sub": user.id})
         response = RedirectResponse(url="/home", status_code=302)
         response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
         response.set_cookie(key="role", value=user.role, httponly=True)
+        return response
         return response
 
 
